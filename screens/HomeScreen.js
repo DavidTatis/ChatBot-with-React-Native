@@ -2,12 +2,13 @@ import React from 'react';
 import { StyleSheet, Text, View, StatusBar, Platform,Alert} from 'react-native';
 import ChatBot from 'react-native-chatbot';
 import {StackNavigator} from 'react-navigation';
-import {Header,Left,Right,Icon} from 'native-base';
+import {Header,Left,Right,Icon, Spinner} from 'native-base';
 import firebase from 'firebase';
 
 
 const user='';
 const METAS=[];
+const steps=[];
 
 export default class HomeScreen extends React.Component {
   state = { currentUser: null,email:null ,estatura:null ,metas:[]}
@@ -21,13 +22,12 @@ export default class HomeScreen extends React.Component {
       METAS=[];
       
       metas.forEach(function(value,key) {
-        METAS.push(key+" - "+value);
+        METAS.push(key);
       });
       
       this.setState({email:user.email,metas:METAS,estatura:user.estatura});
     })
   }
-
 
 
 
@@ -47,19 +47,116 @@ export default class HomeScreen extends React.Component {
             <Icon name="menu" onPress={()=>this.props.navigation.openDrawer()}/>
           </Left>
         </Header>
-        <ChatBot
-          steps={steps} />
+        {this.displayChatBot()}
       </View>
 
     )
   }
+
+
+
+  displayChatBot(){
+    const {metas}=this.state;
+    let idCont=0;
+      let  steps=[];    
+      if(metas.includes(1)){
+
+        steps=[
+          {
+            id: ''+idCont,
+            message: 'Veo que tienes el asignado el objetivo 1.',
+            trigger: ''+(idCont+1),
+          },
+          {
+            id: ''+(idCont+1),
+            message: 'Bye!',
+            end: true,
+          },
+        ];
+        idCont++;
+      }
+      if(metas.includes(4)){
+        steps.pop();
+        steps.push(
+          {
+            id: ''+idCont,
+            message: 'Veo que tienes el asignado el objetivo 4.',
+            trigger: ''+(idCont+1),
+          },
+          {
+            id: ''+(idCont+1),
+            message: 'Bye!',
+            end: true,
+          },
+        );
+        idCont++;
+      }
+
+      if(metas.includes(3)){
+        steps.pop();
+        steps.push(
+          {
+            id: ''+idCont,
+            message: 'Veo que tienes el asignado el objetivo 3.',
+            trigger: ''+(idCont+1),
+          },
+          {
+            id: ''+(idCont+1),
+            message: 'Bye!',
+            end: true,
+          },
+        );
+        idCont++;
+      }
+
+      if(metas.includes(5)){
+        steps.pop();
+        steps.push(
+          {
+            id: ''+idCont,
+            message: 'Veo que tienes el asignado el objetivo 5.',
+            trigger: ''+(idCont+1),
+          },
+          {
+            id: ''+(idCont+1),
+            message: 'Bye!',
+            end: true,
+          },
+        );
+        idCont++;
+      }
+
+      if(metas.includes(6)){
+        steps.pop();
+        steps.push(
+          {
+            id: ''+idCont,
+            message: 'Veo que tienes el asignado el objetivo 6.',
+            trigger: ''+(idCont+1),
+          },
+          {
+            id: ''+(idCont+1),
+            message: 'Bye!',
+            end: true,
+          },
+        );
+        idCont++;
+      }
+
+     
+
+      if(steps.length>=1){
+        return <ChatBot steps={steps}/>
+      }
+    
+  }
+
+  
 }
 
-const steps=[];
 
-if((this.state.metas)===1){
-  steps=stepMeta1;
-}
+
+
 
 
 const stepMeta1=[
