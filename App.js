@@ -7,12 +7,15 @@ import ProfileScreen from './screens/ProfileScreen';
 import firebase from 'firebase';
 import Spinner from './screens/components/Spinner';
 import LoginScreen from './screens/LoginScreen';
+import MetasScreen from './screens/MetasScreen';
 
 
 
-
+const score="23";
+const METAS = [];
+const user = '';
 export default class App extends React.Component {
-  state={loggedIn: null};
+  state={loggedIn: null,score:"33", email: user.email, metas: METAS, estatura: user.estatura};
   componentWillMount() {
     var config = {
       apiKey: "AIzaSyDLbE80J5le-MjtEZuilqYe4UJl78fE1u8",
@@ -26,7 +29,18 @@ export default class App extends React.Component {
 
     firebase.auth().onAuthStateChanged((user)=>{
       if (user) {
-        this.setState({loggedIn:true});
+        const { currentUser } = firebase.auth()
+        this.setState({ currentUser })
+        firebase.database().ref('/usuarios/' + currentUser.uid).once('value', (snapshot) => {
+          user = snapshot.val();
+          metas = user.metas;
+          METAS = [];
+          metas.forEach(function (value, key) {
+            METAS.push(key + " - " + value);
+          });
+          this.setState({loggedIn:true, email: user.email, metas: METAS, estatura: user.estatura });
+        })
+        
       }else{
         this.setState({loggedIn:false});
       }
@@ -45,6 +59,7 @@ export default class App extends React.Component {
   displayLoginOrNot(){
     switch (this.state.loggedIn) {
       case true:
+        score=this.state.email;
         return (<AppDrawerNavigator style={{ flex: 1, marginTop: (Platform.OS === 'ios') ? 18 : 24 }}/>);
       case false:
         return <LoginScreen />
@@ -52,45 +67,48 @@ export default class App extends React.Component {
           return <Spinner size="large"/>
     }
   }
+  
 }
-
 
 
 const {width} = Dimensions.get('window');
 
-const CustomDrawnerComponent= (props)=>(
-  <SafeAreaView style={{flex:1}}>
-    <View style={{height:150, backgroundColor:'white',alignItems:'center',justifyContent:'center'}}>
-      <Image source={require ('./assets/avatar.png')} style={{height:120, width:120,borderRadius:60}}></Image>
-    </View>
+    const CustomDrawnerComponent= (props)=>(
+      <SafeAreaView style={{flex:1}}>
+        <View style={{height:150, backgroundColor:'white',alignItems:'center',justifyContent:'center'}}>
+          <Image source={require ('./assets/avatar.png')} style={{height:120, width:120,borderRadius:60}}></Image>
+        </View>
+        <Text style={{fontSize:15}}> Score:{score}</Text>
+        <ScrollView>
+          <DrawerItems {...props}/>
+        </ScrollView>
+        <View>
+          <Button title="Logout" onPress={()=>firebase.auth().signOut()}/>
+        </View>
+      </SafeAreaView>
+    )
     
-    <ScrollView>
-      <DrawerItems {...props}/>
-    </ScrollView>
-    <View>
-      <Button title="Logout" onPress={()=>firebase.auth().signOut()}/>
-    </View>
-  </SafeAreaView>
-)
-
-const AppDrawerNavigator = createDrawerNavigator({
-    HomeScreen:HomeScreen,
-    Profile:ProfileScreen
-  },
-  {
-    contentComponent:CustomDrawnerComponent,
-    drawerWidth:width,
-    contentOptions:{
-      activeTintColor:'orange'
-    }
-  }
-);
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-});
+    
+    
+    const AppDrawerNavigator = createDrawerNavigator({
+        ChatBot:HomeScreen,
+        Profile:ProfileScreen,
+        Metas: MetasScreen
+      },
+      {
+        contentComponent:CustomDrawnerComponent,
+        drawerWidth:width,
+        contentOptions:{
+          activeTintColor:'orange'
+        }
+      }
+    );
+    
+    const styles = StyleSheet.create({
+      container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }
+    });

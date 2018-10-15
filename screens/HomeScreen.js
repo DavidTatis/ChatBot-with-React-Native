@@ -1,10 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View, StatusBar, Platform, Alert } from 'react-native';
 import ChatBot from 'react-native-chatbot';
+import { Button } from 'react-native-elements';
 import { StackNavigator } from 'react-navigation';
+import RespuestaChatBot from './components/respuestaChatBot';
 import { Header, Left, Right, Icon, Spinner } from 'native-base';
 import firebase from 'firebase';
-
 
 const user = '';
 const METAS = [];
@@ -41,44 +42,42 @@ export default class HomeScreen extends React.Component {
 
   render() {
     return (
-      <View style={{height:650}}>
+
+      <View style={{ height: 650 }}>
         <Header>
           <Left style={{ flex: 1 }}>
             <Icon name="menu" onPress={() => this.props.navigation.openDrawer()} />
           </Left>
         </Header>
-       
         {this.displayChatBot()}
-        
       </View>
-
     )
   }
-
-
+ 
+  ejerciciosHoy=false;
+ 
 
   displayChatBot() {
     const { metas } = this.state;
     let idCont = 10;
     let steps = [];
-    if (metas.includes(1)) {
 
+    if (metas.includes(1)) {
       steps = [
         {
           id: '1',
-          message: 'Veo que tienes el objetivo 1',
+          message: 'Y cuentame...',
           trigger: '2',
         },
         {
           id: '2',
-          message: '¿ Ya has realizado tus ejercicios de hoy ?',
-          trigger: '3',
+          message:'Cuantos minutos de ejercicios has hecho hoy?',
+          trigger:3
         },
         {
           id: '3',
-          options: [
-            { value: ejerciciosHoy = "Si", label: 'Si', trigger: '4' },
-            { value: ejerciciosHoy = "No", label: 'No', trigger: '7' },]
+          component: (<RespuestaChatBot correctValue={22} currentStep={3} meta={1}/ >),
+          waitAction:true
         },
 
         {
@@ -120,19 +119,18 @@ export default class HomeScreen extends React.Component {
       steps.push(
         {
           id: idCont,
-          message: 'Veo que tienes el objetivo 2',
+          message: 'Y cuentame...',
           trigger: idCont + 1,
         },
         {
           id: idCont + 1,
-          message: '¿ Has realizado tus 2 ejercicios de intensidad moderada ?',
+          message: '¿ Cuantos ejercicios de intensidad moderada has realizado hoy ?',
           trigger: idCont + 2,
         },
         {
           id: idCont + 2,
-          options: [
-            { value: ejerciciosHoy = "Si", label: 'Si', trigger: idCont + 3 },
-            { value: ejerciciosHoy = "No", label: 'No', trigger: idCont + 6 },]
+          component: (<RespuestaChatBot correctValue={1} currentStep={(idCont + 2)} meta={2}/ >),
+          waitAction:true
         },
         {
           id: idCont + 3,
@@ -180,19 +178,18 @@ export default class HomeScreen extends React.Component {
       steps.push(
         {
           id: idCont,
-          message: 'Veo que tienes el objetivo 4',
+          message: 'Y cuentame...',
           trigger: idCont + 1,
         },
         {
           id: idCont + 1,
-          message: '¿ Has comido frutas durante el dia ?',
+          message: '¿ Cuantas porciones de frutas has comido durante el dia ?',
           trigger: idCont + 2,
         },
         {
           id: idCont + 2,
-          options: [
-            { value: ejerciciosHoy = "Si", label: 'Si', trigger: idCont + 3 },
-            { value: ejerciciosHoy = "No", label: 'No', trigger: idCont + 6 },]
+          component: (<RespuestaChatBot correctValue={3} currentStep={(idCont + 2)} meta={4}/ >),
+          waitAction:true
         },
         {
           id: idCont + 3,
@@ -207,7 +204,7 @@ export default class HomeScreen extends React.Component {
         {
           id: idCont + 5,
           message: 'Las frutas son la merienda perfecta, pero tambien son buenas en el desayuno y acompando ensaladas',
-          trigger:idCont+9
+          trigger: idCont + 9
         },
         {
           id: idCont + 6,
@@ -222,7 +219,7 @@ export default class HomeScreen extends React.Component {
         {
           id: idCont + 8,
           message: 'Hay frutas para todos los gustos, y las puedas comer a cualquier hora',
-          trigger:idCont+9
+          trigger: idCont + 9
         }
       );
       idCont = idCont + 9;
@@ -234,19 +231,18 @@ export default class HomeScreen extends React.Component {
       steps.push(
         {
           id: idCont,
-          message: 'Veo que tienes el objetivo 3',
+          message: 'Y cuentame...',
           trigger: idCont + 1,
         },
         {
           id: idCont + 1,
-          message: 'Ya comiste tus verduras de hoy',
+          message: '¿Cuantas porciones de verduras comiste hoy?',
           trigger: idCont + 2,
         },
         {
           id: idCont + 2,
-          options: [
-            { value: ejerciciosHoy="Si", label: 'Si', trigger: idCont + 3 },
-            { value: ejerciciosHoy="Ni", label: 'No', trigger: idCont + 6 },]
+          component: (<RespuestaChatBot correctValue={5} currentStep={(idCont+2)} meta={3}/ >),
+          waitAction:true
         },
         {
           id: idCont + 3,
@@ -283,71 +279,80 @@ export default class HomeScreen extends React.Component {
       idCont = idCont + 9;
     }
 
-    if(metas.includes(5)){
+    if (metas.includes(5)) {
       steps.push(
         {
           id: idCont,
-          message: 'Veo que tienes el objetivo 5',
-          trigger: idCont+1,
-      },
-      {
-          id: idCont+1,
-          message:'¿ Tomaste aceite de oliva extra virgen por la mañana ?',
-          trigger: idCont+2,
-      },
-      {
-          id: idCont+2,
-          options: [
-    { value: ejerciciosHoy="Si", label: 'Si', trigger: idCont+3 },
-    { value: ejerciciosHoy="No", label: 'No', trigger: idCont+6 },]
-      },
-  {
-          id: idCont+3,
+          message: 'Y cuentame...',
+          trigger: idCont + 1,
+        },
+        {
+          id: idCont + 1,
+          message: '¿ Cuantas cucharadas de aceite de oliva virgen extra tomaste hoy?',
+          trigger: idCont + 2,
+        },
+        {
+          id: idCont + 2,
+          component: (<RespuestaChatBot correctValue={4} currentStep={(idCont+2)} meta={5}/ >),
+          waitAction:true
+        },
+        {
+          id: idCont + 3,
           message: 'Sigue asi',
-          trigger: idCont+4,
-      },
-  {
-          id: idCont+4,
+          trigger: idCont + 4,
+        },
+        {
+          id: idCont + 4,
           message: 'El aceite de oliva extra virgen antes del desayuno ayuda a mejorar la absorcion de nutrientes de nuestro cuerpo',
-          trigger: idCont+5,
-      },
-      {
-          id: idCont+5,
+          trigger: idCont + 5,
+        },
+        {
+          id: idCont + 5,
           message: 'No olvides hacerlo mañana en la mañana',
-          trigger: idCont+9,
-      },
-  {
-          id: idCont+6,
+          trigger: idCont + 9,
+        },
+        {
+          id: idCont + 6,
           message: 'Te aconsejo que lo hagas, es muy facil',
-          trigger: idCont+7,
-      },
-  {
-          id: idCont+7,
+          trigger: idCont + 7,
+        },
+        {
+          id: idCont + 7,
           message: 'Y tiene una gran ayuda para nuestro organismo',
-          trigger: idCont+8,
-      },
-  {
-          id: idCont+8,
+          trigger: idCont + 8,
+        },
+        {
+          id: idCont + 8,
           message: 'Asi que prueba a hacerlo mañana temprano antes del desayuno',
-          trigger: idCont+9,
-      },
+          trigger: idCont + 9,
+        },
       )
-      idCont=idCont+9;
+      idCont = idCont + 9;
+    }
+
+    if (ejerciciosHoy === "Si") {
+      const { currentUser } = firebase.auth()
+      firebase.database().ref('progreso/usuarios/' + currentUser.uid + '/metas/1/').push({
+        'fecha': '2018-09-24 20:00',
+        'score': '1'
+      }).then((data) => {
+        //success callback<
+        console.log('data ', data)
+      }).catch((error) => {
+        //error callback
+        console.log('error ', error)
+      })
     }
 
 
-    
-
-    
-
-
-
     if (steps.length >= 1) {
+
+
       steps.push(
         {
-          id:idCont,
-          message:'Bueno, espero estes muy bien! Hasta mañana.',
-          end:true
+          id: idCont,
+          message: 'Bueno, espero estes muy bien! Hasta mañana.',
+          end: true
         }
       )
       return <ChatBot steps={steps} />
@@ -360,98 +365,6 @@ export default class HomeScreen extends React.Component {
 
 
 
-
-
-
-const stepMeta1 = [
-  {
-    id: '0',
-    message: 'Hola! Como estas?',
-    trigger: '1',
-  },
-  {
-    id: '1',
-    options: [
-      { value: 1, label: 'Bien', trigger: '2' },
-      { value: 2, label: 'Algo Mal', trigger: '2' },
-    ],
-  },
-  {
-    id: '2',
-    message: 'Cuentame, cuntos minutos has hecho ejercicio?',
-    trigger: '3',
-  },
-  {
-    id: '3',
-    user: true,
-    validator: (value) => {
-      if (isNaN(value)) {
-        return 'value should be a number';
-      } else {
-        return 'Muy Bien! ' + value + ' its ok!';
-      }
-      return true;
-    },
-    trigger: '2',
-  }
-];
-
-
-const steps2 = [
-  {
-    id: '0',
-    message: 'Hola, ¿Como te sientes el dia de hoy?',
-    trigger: '1',
-  },
-  {
-    id: '1',
-    options: [
-      { value: 1, label: 'Bien ', trigger: '2' },
-      { value: 2, label: 'Algo Mal', trigger: '2' },
-    ],
-  }
-]
-
-// if(true){
-// steps2.push({
-//   id: '2',
-//   message: 'tus metas son',
-//   trigger: '1',
-// },)
-// }
-
-
-const pruebaFindRisc = [
-  {
-    id: '0',
-    message: 'Esta es una prueba para la evaluación del riesgo de Diabetes Tipo 2 u otras anormalidades en el metabolismo de la glucosa',
-    trigger: '1'
-  }, {
-    id: '1',
-    message: 'Primero necesitamos unos datos de identificación',
-    trigger: '2'
-  },
-  {
-    id: '2',
-    message: 'En que rango de edad estas?',
-    trigger: '3'
-  },
-  {
-    id: '3',
-    options: [
-      { value: 0, label: 'Menos de 45 años.', trigger: '4' },
-      { value: 2, label: '45 a 54 años.', trigger: '4' },
-      { value: 3, label: '55 a 64 años.', trigger: '4' },
-      { value: 4, label: 'mas de 64 años.', trigger: '4' },
-    ],
-  },
-  {
-    id: '4',
-    message: '{previousValue}+5',
-    end: true
-  }
-
-];
 
 const styles = StyleSheet.create({
   container: {

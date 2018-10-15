@@ -1,58 +1,54 @@
 import React from 'react';
 import { StyleSheet, Text, View, StatusBar, Platform } from 'react-native';
 import ChatBot from 'react-native-chatbot';
-import {StackNavigator} from 'react-navigation';
-import {Header,Left,Right,Icon,ActivityIndicator} from 'native-base';
+import { StackNavigator } from 'react-navigation';
+import { Header, Left, Right, Icon, ActivityIndicator } from 'native-base';
 import firebase from 'firebase';
 
 
-const user={};
-const METAS=[];
+const user = {};
+const METAS = [];
 
 
 export default class ProfileScreen extends React.Component {
-  state = { currentUser: null,email:null ,estatura:null ,metas:[]}
-  componentDidMount(){
-    const {currentUser}=this.state;
-    
-      
-      
-     
+  state = { currentUser: null, email: null, estatura: null, metas: [] }
+  componentDidMount() {
+    const { currentUser } = this.state;
   }
-    componentWillMount() {
-      const { currentUser } = firebase.auth()
-      this.setState({ currentUser })
-      firebase.database().ref('/usuarios/'+currentUser.uid).once('value',(snapshot)=>{
-        user=snapshot.val();
-        metas=user.metas;
-        METAS=[];
-        metas.forEach(function(value,key) {
-          METAS.push(key+" - "+value);
-        });
-        this.setState({email:user.email,metas:METAS,estatura:user.estatura});
-      })
+
+  componentWillMount() {
+    const { currentUser } = firebase.auth()
+    this.setState({ currentUser })
+    firebase.database().ref('/usuarios/' + currentUser.uid).once('value', (snapshot) => {
+      user = snapshot.val();
+      metas = user.metas;
+      METAS = [];
+      metas.forEach(function (value, key) {
+        METAS.push(key + " - " + value);
+      });
+      this.setState({ email: user.email, metas: METAS, estatura: user.estatura });
+    })
   }
-  
+
+  static navigationOptions = {
+    drawerIcon: ({ tintColor }) => (
+      <Icon name="person" style={{ fontSize: 24, color: tintColor }} />
+    )
+  }
+
   render() {
-    
-    return (      
+
+    return (
       <View>
         <Header>
-          <Left style={{flex:1}}>
-            <Icon name="menu" onPress={()=>this.props.navigation.openDrawer()}/>
+          <Left style={{ flex: 1 }}>
+            <Icon name="menu" onPress={() => this.props.navigation.openDrawer()} />
           </Left>
         </Header>
 
         <Text>Email: {this.state.email}</Text>
         <Text>Estatura: {this.state.estatura}</Text>
-        <Text>Metas:</Text>
-        {
-          (this.state.metas).map((element,key)=>
-          {
-            return <Text>{element}</Text>
-          }
-          )
-        }
+
       </View>
     )
   }
