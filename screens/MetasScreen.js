@@ -14,7 +14,7 @@ const progreso = {};
 
 
 export default class MetasScreen extends React.Component {
-    state = { currentUser: null, email: null, estatura: null, metas: [] }
+    state = { currentUser: null, email: null, estatura: null, metas: [], score: 0 }
     componentDidMount() {
         const { currentUser } = this.state;
     }
@@ -26,22 +26,32 @@ export default class MetasScreen extends React.Component {
             user = snapshot.val();
             metas = user.metas;
             METAS = [];
+            this.setState({ email: user.email, estatura: user.estatura });
+            that = this;
             metas.forEach(function (value, key) {
+
                 firebase.database().ref('/progreso/usuarios/' + currentUser.uid + '/metas/' + key + '/')
                     .once('value', (snapshot) => {
                         progreso = snapshot.val();
                         if (progreso !== null) {
-                            console.log("progreso:", progreso);
+                            var keyObj = "";
+                            keyObj = Object.keys(snapshot.val())[Object.keys(snapshot.val()).length-1];
+                            var progresoObject = progreso[keyObj + ""];
+                            var progresoScore = progresoObject["score"];
+                            METAS.push({
+                                descripcion: value,
+                                score: progresoScore
+                            });
+                            // this.setState({ metas: METAS });
                         }
+                        that.setState({ metas: METAS })
+                    }).then(
 
-                    });
+                    );
 
-                METAS.push({
-                    'descripcion': value,
-                    'score': progreso.score
-                });
+
             });
-            this.setState({ email: user.email, metas: METAS, estatura: user.estatura });
+
         });
 
 
@@ -51,6 +61,20 @@ export default class MetasScreen extends React.Component {
         drawerIcon: ({ tintColor }) => (
             <Icon name="flag" style={{ fontSize: 24, color: tintColor }} />
         )
+    }
+
+    calcularScoreTotal = (array) => {
+        if (array.length >=3 && this.state.score===0) {
+            var score = 0;
+            var cont = 0;
+            array.forEach(element => {
+                score += element["score"];
+                cont++;
+            });
+            score = score / cont;
+            this.setState({ score: score });
+        }
+
     }
 
     render() {
@@ -66,13 +90,15 @@ export default class MetasScreen extends React.Component {
                     <CardSection>
                         <Text style={{ fontSize: 24, fontFamily: "Arial", margin: 5, marginTop: 10 }}>Tus Metas</Text>
                     </CardSection>
+                    {this.calcularScoreTotal(this.state.metas)}
                     {
                         (this.state.metas).map((element, i) => {
+
                             return (
                                 <Card key={i}>
                                     <Text style={{ fontSize: 20, fontFamily: "Arial", marginLeft: 8 }}>{element.descripcion}.</Text>
                                     <CardSection>
-                                        <Text style={{ fontSize: 15, fontFamily: "Arial", fontWeight: "bold" }}>score: {element.scsore}</Text>
+                                        <Text style={{ fontSize: 15, fontFamily: "Arial", fontWeight: "bold" }}>score: {(element.score).toFixed(2)}</Text>
                                     </CardSection>
                                 </Card>
                             )
@@ -80,7 +106,7 @@ export default class MetasScreen extends React.Component {
                         )
                     }
                     <CardSection>
-                        <Text style={{ fontSize: 18, fontFamily: "Arial", fontWeight: "bold" }}>Score total: 69</Text>
+                        <Text style={{ fontSize: 18, fontFamily: "Arial", fontWeight: "bold" }}>Score total: {(this.state.score).toFixed(2)}</Text>
                     </CardSection>
                 </Card>
 

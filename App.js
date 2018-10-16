@@ -78,7 +78,10 @@ const {width} = Dimensions.get('window');
         <View style={{height:150, backgroundColor:'white',alignItems:'center',justifyContent:'center'}}>
           <Image source={require ('./assets/avatar.png')} style={{height:120, width:120,borderRadius:60}}></Image>
         </View>
-        <Text style={{fontSize:15}}> Score:{score}</Text>
+        <View style={{alignItems:'center',justifyContent:'center'}}>
+            <Text style={{fontSize:15}}>{score}</Text>
+        </View>
+        
         <ScrollView>
           <DrawerItems {...props}/>
         </ScrollView>
