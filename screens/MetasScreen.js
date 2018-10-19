@@ -5,6 +5,7 @@ import { Header, Left, Right, Icon, ActivityIndicator } from 'native-base';
 import firebase from 'firebase';
 import Card from './components/card.js';
 import CardSection from './components/cardsection.js';
+import { Button } from 'react-native-elements';
 
 
 const user = {};
@@ -35,7 +36,7 @@ export default class MetasScreen extends React.Component {
                         progreso = snapshot.val();
                         if (progreso !== null) {
                             var keyObj = "";
-                            keyObj = Object.keys(snapshot.val())[Object.keys(snapshot.val()).length-1];
+                            keyObj = Object.keys(snapshot.val())[Object.keys(snapshot.val()).length - 1];
                             var progresoObject = progreso[keyObj + ""];
                             var progresoScore = progresoObject["score"];
                             METAS.push({
@@ -64,7 +65,7 @@ export default class MetasScreen extends React.Component {
     }
 
     calcularScoreTotal = (array) => {
-        if (array.length >=3 && this.state.score===0) {
+        if (array.length >= 3 && this.state.score === 0) {
             var score = 0;
             var cont = 0;
             array.forEach(element => {
@@ -100,14 +101,27 @@ export default class MetasScreen extends React.Component {
                                     <CardSection>
                                         <Text style={{ fontSize: 15, fontFamily: "Arial", fontWeight: "bold" }}>score: {(element.score).toFixed(2)}</Text>
                                     </CardSection>
+                                    <View style={{ alignItems: 'flex-end', justifyContent: 'flex-end' }}>
+                                        <Button
+                                            raised
+                                            icon={{ name: 'send' }}
+                                            title=""
+                                            backgroundColor="#00f"
+                                            style={{ width: 100 }}
+                                        />
+                                    </View>
+
                                 </Card>
                             )
                         }
                         )
                     }
-                    <CardSection>
-                        <Text style={{ fontSize: 18, fontFamily: "Arial", fontWeight: "bold" }}>Score total: {(this.state.score).toFixed(2)}</Text>
-                    </CardSection>
+                    <Card>
+                        <CardSection>
+                            <Text style={{ fontSize: 18, fontFamily: "Arial", fontWeight: "bold" }}>Score total: {(this.state.score).toFixed(2)}</Text>
+                        </CardSection>
+                    </Card>
+
                 </Card>
 
 

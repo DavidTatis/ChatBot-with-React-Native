@@ -62,7 +62,7 @@ class RespuestaChatBot extends React.Component {
                     value={this.state.respuesta}
                     onChangeText={respuesta => this.setState({ respuesta })}
                     editabled={!this.disabledBtn}
-                    style={{ width: 150 }}
+                    style={{ width: 300 }}
                     borderColor={'#000000'}
                     backgroundColor={'#ffffff'}
                 />
