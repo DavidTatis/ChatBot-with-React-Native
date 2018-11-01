@@ -130,7 +130,6 @@ export default class HomeScreen extends React.Component {
         var day = moment(date).format("DD");
         var hora = moment(date).format("HH");
         // var day=moment(objMeta.ultimaRespuesta).format('dd HH');
-        console.log("dia de meta la meta " + meta, day);
         switch (meta) {
           case 1:
             if (day !== tday && Number(objMeta.respuestas) < 150) returnBool = true;
@@ -185,7 +184,6 @@ export default class HomeScreen extends React.Component {
         }
         return returnBool;
       } else {
-        console.log("aun no hay respuesta en" + meta);
         return true;
       }
 
@@ -478,8 +476,7 @@ export default class HomeScreen extends React.Component {
           'fecha': '2018-09-24 20:00',
           'score': '1'
         }).then((data) => {
-          //success callback<
-          console.log('data ', data)
+          //success callback
         }).catch((error) => {
           //error callback
           console.log('error ', error)

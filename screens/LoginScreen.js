@@ -18,7 +18,7 @@ class Login extends React.Component {
 		const { email, password } = this.state;
 		firebase.auth().signInWithEmailAndPassword(email, password)
 			.then(this.onLoginSuccess.bind(this))
-			.catch(() => { this.onLoginFail.bind(this) });
+			.catch( this.onLoginFail.bind(this));
 	}
 
 	registrar() {
@@ -66,11 +66,11 @@ class Login extends React.Component {
 
 	render() {
 		return (
-
 			<Card>
-				<Header headerText={'Login'} />
+				<Header headerText={'Inicia Sesion'} />
 				<CardSection>
 					<View style={{
+						backgroundColor:'#ffffff',
 						height: 250,
 						flex: 1,
 						flexDirection: 'column',

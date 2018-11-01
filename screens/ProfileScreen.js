@@ -1,7 +1,5 @@
 import React from 'react';
 import { StyleSheet, Text, View, StatusBar, Platform } from 'react-native';
-import ChatBot from 'react-native-chatbot';
-import { StackNavigator } from 'react-navigation';
 import { Header, Left, Right, Icon, ActivityIndicator } from 'native-base';
 import firebase from 'firebase';
 

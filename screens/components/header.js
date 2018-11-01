@@ -19,7 +19,7 @@ const Styles={
     	textShadowColor: '#ff0000'
 	},
 	viewStyle:{
-		backgroundColor: '#00ff00',
+		backgroundColor: '#E3F2FD',
 		justifyContent: 'center',
 		alignItems: 'center',
 		height:80,

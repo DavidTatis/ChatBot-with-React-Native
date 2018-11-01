@@ -2,6 +2,11 @@
   "name": "Chatbot",
   "version": "0.1.0",
   "private": true,
+  "rnpm": {
+    "assets": [
+      "./assets/font/moderna"
+    ]
+  },
   "devDependencies": {
     "react-native-scripts": "1.14.0",
     "jest-expo": "~27.0.0",
